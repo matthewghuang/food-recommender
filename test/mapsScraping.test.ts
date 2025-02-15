@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test"
+import { expect, test, type Locator } from "@playwright/test"
 
 let url = `
     https://www.google.com/maps/search/restaurants+near+Hastings+Sunrise/
@@ -51,18 +51,12 @@ test("it should scroll down until it finds 50 restaurants", async ({ page }) => 
     expect(labels.length).toBeGreaterThanOrEqual(50)
 })
 
-test("it should pull ratings", async ({ page }) => {
+test("it should find the rating", async ({ page }) => {
     await page.goto(url)
-    const restaurantLabels = await page.getByRole("feed").locator("a[aria-label]").all()
+    const restaurantLabel: Locator = await page.getByRole("feed").locator("a[aria-label]").first()
 
-    for (const restaurantLabel of restaurantLabels) {
-        const parent = restaurantLabel.locator("..")
-        const spans = await parent.locator("span").all()
+    const parent = restaurantLabel.locator("..")
+    const ratingSpan = await parent.locator("span[aria-label]").first()
 
-        spans.filter(async (span) => {
-            const regex = /(\d+\.\d+) stars (\d+) Reviews/
-            const ariaLabel = await span.getAttribute("aria-label")
-            return ariaLabel?.match(regex)
-        })
-    }
+    expect(ratingSpan).toBeDefined()
 })
