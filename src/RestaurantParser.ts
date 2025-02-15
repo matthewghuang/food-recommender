@@ -1,5 +1,6 @@
 import { MLCEngine } from "@mlc-ai/web-llm";
 import { Coordinates } from "./Geolocation";
+import { chromium } from "rebrowser-playwright";
 
 interface Restaurant {
     name: string
@@ -29,7 +30,11 @@ export async function getRestaurants(location: Location, engine: MLCEngine): Pro
         throw new Error("No location passed")
     }
 
-    await 
+    const browser = await chromium.launch()
+    const page = await browser.newPage()
+    await page.goto(url)
+
+    await browser.close()
 
     return []
 }
