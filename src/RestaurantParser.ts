@@ -15,19 +15,21 @@ interface Location {
 }
 
 export async function getRestaurants(location: Location, engine: MLCEngine): Promise<Array<Restaurant>> {
-    let query: string
+    let url: string
 
     if (location.coordinates) {
-        query = `
+        url = `
             https://www.google.com/maps/search/restaurants+near+me/@${location.coordinates.latitude},${location.coordinates.longitude}/ 
         `
     } else if (location.address) {
-        query = `
+        url = `
             https://www.google.com/maps/search/restaurants+near+${location.address}/
         `
     } else {
         throw new Error("No location passed")
     }
+
+    await 
 
     return []
 }
